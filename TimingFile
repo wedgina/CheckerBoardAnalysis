@@ -1,0 +1,73 @@
+#!/bin/bash
+
+
+#Check whether the file subjList.txt exists; if not, create it
+if [ ! -f subjList.txt ]; then
+	ls | grep ^sub- > subjList.txt
+fi
+
+#Loop over all subjects and format timing files into FSL format
+for subj in `cat subjList.txt`; do
+	cd $subj/func
+	cat ${subj}_task-FlickeringCheckerboard_run-1_events.tsv | awk '{if ($3=="Checkerboard") {print $1, $2, 1}}' > checkerboard_run1.txt
+	cat ${subj}_task-FlickeringCheckerboard_run-1_events.tsv | awk '{if ($3=="Music") {print $1, $2, 1}}' > music_run1.txt
+
+#Now convert to AFNI format
+	timing_tool.py -fsl_timing_files checkerboard*.txt -write_timing checkerboard.1D
+	timing_tool.py -fsl_timing_files music*.txt -write_timing music.1D
+
+	cd ../..
+
+done
+
+#Troubleshooting
+#!/bin/bash
+
+# Check whether the file subjList.txt exists; if not, create it
+if [ ! -f subjList.txt ]; then
+    ls | grep ^sub- > subjList.txt
+fi
+
+# Loop over all subjects and format timing files into FSL format
+while read -r subj; do
+    echo "Processing subject: $subj"
+    
+    # Ensure the directory exists before entering
+    if [ ! -d "$subj/func" ]; then
+        echo "ERROR: Directory $subj/func not found!"
+        continue
+    fi
+
+    cd "$subj/func" || { echo "ERROR: Failed to enter $subj/func"; exit 1; }
+
+    # Ensure event files exist
+    for run in 1; do
+        if [ ! -f "${subj}_task-FlickeringCheckerboard_run-${run}_events.tsv" ]; then
+            echo "WARNING: Missing ${subj}_task-FlickeringCheckerboard_run-${run}_events.tsv"
+            continue
+        fi
+
+        # Extract events and create FSL timing files
+        awk '{if ($3=="Checkerboard") print $1, $2, 1}' "${subj}_task-FlickeringCheckerboard_run-${run}_events.tsv" > "checkerboard_run${run}.txt"
+        awk '{if ($3=="Music") print $1, $2, 1}' "${subj}_task-FlickeringCheckerboard_run-${run}_events.tsv" > "music_run${run}.txt"
+    done
+
+    # Debug: List created files
+    ls -l checkerboard_run*.txt music_run*.txt
+
+    # Convert to AFNI format (only if files exist)
+    if ls checkerboard_run*.txt 1> /dev/null 2>&1; then
+        timing_tool.py -fsl_timing_files checkerboard_run*.txt -write_timing checkerboard.1D
+    else
+        echo "WARNING: No checkerboard timing files found for $subj"
+    fi
+
+    if ls music_run*.txt 1> /dev/null 2>&1; then
+        timing_tool.py -fsl_timing_files music_run*.txt -write_timing music.1D
+    else
+        echo "WARNING: No music timing files found for $subj"
+    fi
+
+    cd ../..
+
+done < subjList.txt
