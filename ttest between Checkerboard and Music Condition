@@ -1,0 +1,195 @@
+cd ~/Desktop/Flanker
+
+#set some variables
+mask_prefix=mean_group_mask
+
+#Check to see if an appropriate mask exists. If not, make one by 
+# combining the individual masks generated in each  subject's preprocessing
+if [ ! -f ${mask_prefix}+tlrc.HEAD ]; then
+  masknames=(s*.results/mask_group+tlrc.HEAD)
+  3dmerge -prefix $mask_prefix $masknames
+fi
+-mask ${mask_prefix}+tlrc \
+-Clustsim \
+
+# t-test conducted on subjects from original Checkerboard Analysis (subjects 1 - 34)
+
+3dttest++ \
+-prefix ttest_checkerboard_music_clustsim \
+-paired \
+-mask mean_group_mask+tlrc \
+-Clustsim \
+-AminusB \
+-setA \
+sub-01.results/stats.sub-01_REML+tlrc'[4]' \
+sub-02.results/stats.sub-02_REML+tlrc'[4]' \
+sub-03.results/stats.sub-03_REML+tlrc'[4]' \
+sub-04.results/stats.sub-04_REML+tlrc'[4]' \
+sub-05.results/stats.sub-05_REML+tlrc'[4]' \
+sub-06.results/stats.sub-06_REML+tlrc'[4]' \
+sub-07.results/stats.sub-07_REML+tlrc'[4]' \
+sub-08.results/stats.sub-08_REML+tlrc'[4]' \
+sub-09.results/stats.sub-09_REML+tlrc'[4]' \
+sub-10.results/stats.sub-10_REML+tlrc'[4]' \
+sub-11.results/stats.sub-11_REML+tlrc'[4]' \
+sub-12.results/stats.sub-12_REML+tlrc'[4]' \
+sub-13.results/stats.sub-13_REML+tlrc'[4]' \
+sub-14.results/stats.sub-14_REML+tlrc'[4]' \
+sub-15.results/stats.sub-15_REML+tlrc'[4]' \
+sub-16.results/stats.sub-16_REML+tlrc'[4]' \
+sub-17.results/stats.sub-17_REML+tlrc'[4]' \
+sub-18.results/stats.sub-18_REML+tlrc'[4]' \
+sub-19.results/stats.sub-19_REML+tlrc'[4]' \
+sub-20.results/stats.sub-20_REML+tlrc'[4]' \
+sub-21.results/stats.sub-21_REML+tlrc'[4]' \
+sub-22.results/stats.sub-22_REML+tlrc'[4]' \
+sub-23.results/stats.sub-23_REML+tlrc'[4]' \
+sub-24.results/stats.sub-24_REML+tlrc'[4]' \
+sub-25.results/stats.sub-25_REML+tlrc'[4]' \
+sub-26.results/stats.sub-26_REML+tlrc'[4]' \
+sub-27.results/stats.sub-27_REML+tlrc'[4]' \
+sub-28.results/stats.sub-28_REML+tlrc'[4]' \
+sub-29.results/stats.sub-29_REML+tlrc'[4]' \
+sub-30.results/stats.sub-30_REML+tlrc'[4]' \
+sub-31.results/stats.sub-31_REML+tlrc'[4]' \
+sub-32.results/stats.sub-32_REML+tlrc'[4]' \
+sub-33.results/stats.sub-33_REML+tlrc'[4]' \
+sub-34.results/stats.sub-34_REML+tlrc'[4]' \
+-setB \
+sub-01.results/stats.sub-01_REML+tlrc'[1]' \
+sub-02.results/stats.sub-02_REML+tlrc'[1]' \
+sub-03.results/stats.sub-03_REML+tlrc'[1]' \
+sub-04.results/stats.sub-04_REML+tlrc'[1]' \
+sub-05.results/stats.sub-05_REML+tlrc'[1]' \
+sub-06.results/stats.sub-06_REML+tlrc'[1]' \
+sub-07.results/stats.sub-07_REML+tlrc'[1]' \
+sub-08.results/stats.sub-08_REML+tlrc'[1]' \
+sub-09.results/stats.sub-09_REML+tlrc'[1]' \
+sub-10.results/stats.sub-10_REML+tlrc'[1]' \
+sub-11.results/stats.sub-11_REML+tlrc'[1]' \
+sub-12.results/stats.sub-12_REML+tlrc'[1]' \
+sub-13.results/stats.sub-13_REML+tlrc'[1]' \
+sub-14.results/stats.sub-14_REML+tlrc'[1]' \
+sub-15.results/stats.sub-15_REML+tlrc'[1]' \
+sub-16.results/stats.sub-16_REML+tlrc'[1]' \
+sub-17.results/stats.sub-17_REML+tlrc'[1]' \
+sub-18.results/stats.sub-18_REML+tlrc'[1]' \
+sub-19.results/stats.sub-19_REML+tlrc'[1]' \
+sub-20.results/stats.sub-20_REML+tlrc'[1]' \
+sub-21.results/stats.sub-21_REML+tlrc'[1]' \
+sub-22.results/stats.sub-22_REML+tlrc'[1]' \
+sub-23.results/stats.sub-23_REML+tlrc'[1]' \
+sub-24.results/stats.sub-24_REML+tlrc'[1]' \
+sub-25.results/stats.sub-25_REML+tlrc'[1]' \
+sub-26.results/stats.sub-26_REML+tlrc'[1]' \
+sub-27.results/stats.sub-27_REML+tlrc'[1]' \
+sub-28.results/stats.sub-28_REML+tlrc'[1]' \
+sub-29.results/stats.sub-29_REML+tlrc'[1]' \
+sub-30.results/stats.sub-30_REML+tlrc'[1]' \
+sub-31.results/stats.sub-31_REML+tlrc'[1]' \
+sub-32.results/stats.sub-32_REML+tlrc'[1]' \
+sub-33.results/stats.sub-33_REML+tlrc'[1]' \
+sub-34.results/stats.sub-34_REML+tlrc'[1]' 
+
+# t-test between checkerboard and music conditions for additional participants (for subjects 1 - 46)
+
+3dttest++ \
+-prefix subs46_ttest_checkerboard_music_clustsim \
+-paired \
+-mask mean_group_mask+tlrc \
+-Clustsim \
+-AminusB \
+-setA \
+sub-01.results/stats.sub-01_REML+tlrc'[4]' \
+sub-02.results/stats.sub-02_REML+tlrc'[4]' \
+sub-03.results/stats.sub-03_REML+tlrc'[4]' \
+sub-04.results/stats.sub-04_REML+tlrc'[4]' \
+sub-05.results/stats.sub-05_REML+tlrc'[4]' \
+sub-06.results/stats.sub-06_REML+tlrc'[4]' \
+sub-07.results/stats.sub-07_REML+tlrc'[4]' \
+sub-08.results/stats.sub-08_REML+tlrc'[4]' \
+sub-09.results/stats.sub-09_REML+tlrc'[4]' \
+sub-10.results/stats.sub-10_REML+tlrc'[4]' \
+sub-11.results/stats.sub-11_REML+tlrc'[4]' \
+sub-12.results/stats.sub-12_REML+tlrc'[4]' \
+sub-13.results/stats.sub-13_REML+tlrc'[4]' \
+sub-14.results/stats.sub-14_REML+tlrc'[4]' \
+sub-15.results/stats.sub-15_REML+tlrc'[4]' \
+sub-16.results/stats.sub-16_REML+tlrc'[4]' \
+sub-17.results/stats.sub-17_REML+tlrc'[4]' \
+sub-18.results/stats.sub-18_REML+tlrc'[4]' \
+sub-19.results/stats.sub-19_REML+tlrc'[4]' \
+sub-20.results/stats.sub-20_REML+tlrc'[4]' \
+sub-21.results/stats.sub-21_REML+tlrc'[4]' \
+sub-22.results/stats.sub-22_REML+tlrc'[4]' \
+sub-23.results/stats.sub-23_REML+tlrc'[4]' \
+sub-24.results/stats.sub-24_REML+tlrc'[4]' \
+sub-25.results/stats.sub-25_REML+tlrc'[4]' \
+sub-26.results/stats.sub-26_REML+tlrc'[4]' \
+sub-27.results/stats.sub-27_REML+tlrc'[4]' \
+sub-28.results/stats.sub-28_REML+tlrc'[4]' \
+sub-29.results/stats.sub-29_REML+tlrc'[4]' \
+sub-30.results/stats.sub-30_REML+tlrc'[4]' \
+sub-31.results/stats.sub-31_REML+tlrc'[4]' \
+sub-32.results/stats.sub-32_REML+tlrc'[4]' \
+sub-33.results/stats.sub-33_REML+tlrc'[4]' \
+sub-34.results/stats.sub-34_REML+tlrc'[4]' \
+sub-35.results/stats.sub-35_REML+tlrc'[4]' \
+sub-36.results/stats.sub-36_REML+tlrc'[4]' \
+sub-37.results/stats.sub-37_REML+tlrc'[4]' \
+sub-38.results/stats.sub-38_REML+tlrc'[4]' \
+sub-39.results/stats.sub-39_REML+tlrc'[4]' \
+sub-40.results/stats.sub-40_REML+tlrc'[4]' \
+sub-41.results/stats.sub-41_REML+tlrc'[4]' \
+sub-42.results/stats.sub-42_REML+tlrc'[4]' \
+sub-43.results/stats.sub-43_REML+tlrc'[4]' \
+sub-44.results/stats.sub-44_REML+tlrc'[4]' \
+sub-45.results/stats.sub-45_REML+tlrc'[4]' \
+sub-46.results/stats.sub-46_REML+tlrc'[4]' \
+-setB \
+sub-01.results/stats.sub-01_REML+tlrc'[1]' \
+sub-02.results/stats.sub-02_REML+tlrc'[1]' \
+sub-03.results/stats.sub-03_REML+tlrc'[1]' \
+sub-04.results/stats.sub-04_REML+tlrc'[1]' \
+sub-05.results/stats.sub-05_REML+tlrc'[1]' \
+sub-06.results/stats.sub-06_REML+tlrc'[1]' \
+sub-07.results/stats.sub-07_REML+tlrc'[1]' \
+sub-08.results/stats.sub-08_REML+tlrc'[1]' \
+sub-09.results/stats.sub-09_REML+tlrc'[1]' \
+sub-10.results/stats.sub-10_REML+tlrc'[1]' \
+sub-11.results/stats.sub-11_REML+tlrc'[1]' \
+sub-12.results/stats.sub-12_REML+tlrc'[1]' \
+sub-13.results/stats.sub-13_REML+tlrc'[1]' \
+sub-14.results/stats.sub-14_REML+tlrc'[1]' \
+sub-15.results/stats.sub-15_REML+tlrc'[1]' \
+sub-16.results/stats.sub-16_REML+tlrc'[1]' \
+sub-17.results/stats.sub-17_REML+tlrc'[1]' \
+sub-18.results/stats.sub-18_REML+tlrc'[1]' \
+sub-19.results/stats.sub-19_REML+tlrc'[1]' \
+sub-20.results/stats.sub-20_REML+tlrc'[1]' \
+sub-21.results/stats.sub-21_REML+tlrc'[1]' \
+sub-22.results/stats.sub-22_REML+tlrc'[1]' \
+sub-23.results/stats.sub-23_REML+tlrc'[1]' \
+sub-24.results/stats.sub-24_REML+tlrc'[1]' \
+sub-25.results/stats.sub-25_REML+tlrc'[1]' \
+sub-26.results/stats.sub-26_REML+tlrc'[1]' \
+sub-27.results/stats.sub-27_REML+tlrc'[1]' \
+sub-28.results/stats.sub-28_REML+tlrc'[1]' \
+sub-29.results/stats.sub-29_REML+tlrc'[1]' \
+sub-30.results/stats.sub-30_REML+tlrc'[1]' \
+sub-31.results/stats.sub-31_REML+tlrc'[1]' \
+sub-32.results/stats.sub-32_REML+tlrc'[1]' \
+sub-33.results/stats.sub-33_REML+tlrc'[1]' \
+sub-34.results/stats.sub-34_REML+tlrc'[1]' \
+sub-35.results/stats.sub-35_REML+tlrc'[1]' \
+sub-36.results/stats.sub-36_REML+tlrc'[1]' \
+sub-37.results/stats.sub-37_REML+tlrc'[1]' \
+sub-38.results/stats.sub-38_REML+tlrc'[1]' \
+sub-39.results/stats.sub-39_REML+tlrc'[1]' \
+sub-40.results/stats.sub-40_REML+tlrc'[1]' \
+sub-41.results/stats.sub-41_REML+tlrc'[1]' \
+sub-42.results/stats.sub-42_REML+tlrc'[1]' \
+sub-43.results/stats.sub-43_REML+tlrc'[1]' \
+sub-44.results/stats.sub-44_REML+tlrc'[1]' \
+sub-45.results/stats.sub-45_REML+tlrc'[1]' \
+sub-46.results/stats.sub-46_REML+tlrc'[1]' 
